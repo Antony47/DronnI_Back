@@ -13,11 +13,13 @@ namespace DronnI_Back.Models
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Drone> Drones { get; set; }
         public DbSet<Rent> Rents { get; set; }
+        public object User { get; internal set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
-               // создаем бд с новой схемой
+            
+            // создаем бд с новой схемой
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

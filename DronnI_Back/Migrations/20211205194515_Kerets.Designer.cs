@@ -4,14 +4,16 @@ using DronnI_Back.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DronnI_Back.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20211205194515_Kerets")]
+    partial class Kerets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,14 +60,13 @@ namespace DronnI_Back.Migrations
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("OperatorId")
-                        .IsRequired()
+                    b.Property<int>("OperatorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("StatisticId")
+                    b.Property<int>("StatisticId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -152,7 +153,9 @@ namespace DronnI_Back.Migrations
 
                     b.HasOne("DronnI_Back.Models.DbModels.Statistic", "Statistic")
                         .WithMany()
-                        .HasForeignKey("StatisticId");
+                        .HasForeignKey("StatisticId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Customer");
 

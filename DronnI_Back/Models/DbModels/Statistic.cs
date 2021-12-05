@@ -9,5 +9,6 @@ namespace DronnI_Back.Models.DbModels
     {
         public int Id { get; set; }
         public string Info { get; set; }
+
     }
 }

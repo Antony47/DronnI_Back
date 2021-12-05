@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DronnI_Back.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211130090629_Kerets_")]
-    partial class Kerets_
+    [Migration("20211205211539_Martyny")]
+    partial class Martyny
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -60,13 +60,14 @@ namespace DronnI_Back.Migrations
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OperatorId")
+                    b.Property<int?>("OperatorId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime?>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StatisticId")
+                    b.Property<int?>("StatisticId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -108,9 +109,6 @@ namespace DronnI_Back.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -156,9 +154,7 @@ namespace DronnI_Back.Migrations
 
                     b.HasOne("DronnI_Back.Models.DbModels.Statistic", "Statistic")
                         .WithMany()
-                        .HasForeignKey("StatisticId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatisticId");
 
                     b.Navigation("Customer");
 
