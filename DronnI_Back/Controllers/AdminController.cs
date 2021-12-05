@@ -37,7 +37,7 @@ namespace DronnI_Back.Controllers
         }
 
         [HttpDelete("deleteDrone/{id}")]
-        public IActionResult DeleteDrone(int id)///???????????
+        public IActionResult DeleteDrone(int id)
         {
             Drone drone = appCtx.Drones.FirstOrDefault(d => d.Id == id);
             if (drone != null)
@@ -50,7 +50,7 @@ namespace DronnI_Back.Controllers
             return BadRequest(new { errorText = "Invalid DroneId" });
         }
         [HttpGet]
-        public IActionResult GetMigration( int idMiration)//
+        public IActionResult GetMigration( int idMiration)///???????????
         {
             return BadRequest(new { errorText = "Invalid Migration" });
         }

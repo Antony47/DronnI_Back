@@ -28,13 +28,12 @@ namespace DronnI_Back.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-
             Statistic statistic = appCtx.Statistics.FirstOrDefault(s => s.Id == id);
             if (statistic != null)
             {
                 return Json(statistic);
             }
-            return BadRequest(new { errorText = "Invalid idStatistic." });
+            return BadRequest(new { errorText = "Invalid idStatistic" });
         }
     }
 }
