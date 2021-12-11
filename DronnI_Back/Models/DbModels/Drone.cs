@@ -11,6 +11,7 @@ namespace DronnI_Back.Models.DbModels
         public int Id { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
+        public string Status { get; set; }
         public int OwnerId { get; set; }
         public User Owner { get; set; }
     }

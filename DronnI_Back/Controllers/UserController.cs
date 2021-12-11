@@ -25,9 +25,9 @@ namespace DronnI_Back.Controllers
             User user = appCtx.Users.FirstOrDefault(u => u.Id == droneModel.OwnerId);
             if (user != null)
             {
-                Drone drone = new Drone { OwnerId = droneModel.OwnerId, Owner = user };
+                Drone drone = new Drone { OwnerId = droneModel.OwnerId, Owner = user , Status = "not available" };
                 appCtx.Drones.Add(drone);
-                appCtx.Users.FirstOrDefault(u => u.Id == droneModel.OwnerId).Drones.Add(drone);///???
+                appCtx.Users.FirstOrDefault(u => u.Id == droneModel.OwnerId).Drones.Add(drone);
                 appCtx.SaveChanges();
                 return Ok();
             }
@@ -35,19 +35,33 @@ namespace DronnI_Back.Controllers
             return BadRequest(new { errorText = "Invalid OwnerId" });
         }
 
-        [HttpDelete("deleteDrone/{id}")] ///need to add condition
-        public IActionResult DeleteDrone(int id)///???????????
+        [HttpDelete("deleteDrone/{id}")]
+        public IActionResult DeleteDrone(int id)
         {
             Drone drone = appCtx.Drones.FirstOrDefault(d => d.Id == id);
             if (drone != null)
             {
                 appCtx.Drones.Remove(drone);
-                //appCtx.Users.FirstOrDefault(u => u.Drones.FirstOrDefault(d => d.Id == id) == droneModel.OwnerId).Drones.
                 appCtx.SaveChanges();
                 return Ok();
             }
 
             return BadRequest(new { errorText = "Invalid DroneId" });
         }
+
+        [HttpPost("updateDrone")]
+        public IActionResult UpdateDrone(int id, string Status)
+        {
+            Drone drone = appCtx.Drones.FirstOrDefault(d => d.Id == id);
+            if (drone != null)
+            {
+                appCtx.Drones.FirstOrDefault(d => d.Id == id).Status = Status;
+                appCtx.SaveChanges();
+                return Ok();
+            }
+
+            return BadRequest(new { errorText = "Invalid DroneId" });
+        }
+
     }
 }

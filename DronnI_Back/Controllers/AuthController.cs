@@ -35,7 +35,7 @@ namespace DronnI_Back.Controllers
         [HttpGet]
         public string Get()
         {
-            return "Fuck";
+            return "Sure";
         }
         public User AddUser(string login, string password, string email)
         {

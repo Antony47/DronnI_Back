@@ -43,14 +43,13 @@ namespace DronnI_Back.Controllers
             if (drone != null)
             {
                 appCtx.Drones.Remove(drone);
-                //appCtx.Users.FirstOrDefault(u => u.Drones.FirstOrDefault(d => d.Id == id) == droneModel.OwnerId).Drones.
                 appCtx.SaveChanges();
                 return Ok();
             }
             return BadRequest(new { errorText = "Invalid DroneId" });
         }
         [HttpGet]
-        public IActionResult GetMigration( int idMiration)///???????????
+        public IActionResult GetMigration( int idMiration)
         {
             return BadRequest(new { errorText = "Invalid Migration" });
         }

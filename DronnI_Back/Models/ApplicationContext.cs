@@ -13,6 +13,7 @@ namespace DronnI_Back.Models
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Drone> Drones { get; set; }
         public DbSet<Rent> Rents { get; set; }
+        public DbSet<Backup> Backups { get; set; }
         public object User { get; internal set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
