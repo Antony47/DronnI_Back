@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TokyoBike.Helpers;
+using DronnI_Back.Helpers;
 
 namespace DronnI_Back.Controllers
 {
@@ -46,7 +46,7 @@ namespace DronnI_Back.Controllers
             if (rent == null)
             {
                 Drone drone = appCtx.Drones.FirstOrDefault(d => d.Id == rentModel.DroneId);
-                User user = (User)HttpContext.Items["User"];//??
+                User user = (User)HttpContext.Items["User"];
                 if (drone != null)
                 {
                     Rent primaryRent = new Rent
@@ -74,7 +74,7 @@ namespace DronnI_Back.Controllers
             if (rent == null)
             {
                 Drone drone = appCtx.Drones.FirstOrDefault(d => d.Id == rentModel.DroneId);
-                User user = (User)HttpContext.Items["User"];//??
+                User user = (User)HttpContext.Items["User"];
                 if (drone != null)
                 {
                     Rent primaryRent = new Rent
@@ -95,7 +95,7 @@ namespace DronnI_Back.Controllers
             return BadRequest();
         }
 
-        [HttpPost("addStatistic")]//????????
+        [HttpPost("addStatistic")]
         public IActionResult addStatistic(int idRent, string info)
         {
             Rent rent = appCtx.Rents.FirstOrDefault(r => r.Id == idRent);
@@ -104,7 +104,7 @@ namespace DronnI_Back.Controllers
                 Statistic statistic = new Statistic { Info = info};
                 appCtx.Statistics.Add(statistic);
                 appCtx.SaveChanges();
-                appCtx.Rents.FirstOrDefault(r => r.Id == idRent).Statistic = statistic;///???
+                appCtx.Rents.FirstOrDefault(r => r.Id == idRent).Statistic = statistic;
                 appCtx.Rents.FirstOrDefault(r => r.Id == idRent).StatisticId = statistic.Id;
                 appCtx.Rents.FirstOrDefault(r => r.Id == idRent).EndTime = DateTime.Now;
                 appCtx.SaveChanges();

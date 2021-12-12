@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DronnI_Back.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211207005119_Kash")]
-    partial class Kash
+    [Migration("20211211164019_aeve")]
+    partial class aeve
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,24 @@ namespace DronnI_Back.Migrations
                     b.ToTable("Backups");
                 });
 
+            modelBuilder.Entity("DronnI_Back.Models.DbModels.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Discription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("DronnI_Back.Models.DbModels.Drone", b =>
                 {
                     b.Property<int>("Id")
@@ -49,8 +67,14 @@ namespace DronnI_Back.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("X")
                         .HasColumnType("float");
@@ -59,6 +83,8 @@ namespace DronnI_Back.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OwnerId");
 
@@ -145,11 +171,17 @@ namespace DronnI_Back.Migrations
 
             modelBuilder.Entity("DronnI_Back.Models.DbModels.Drone", b =>
                 {
+                    b.HasOne("DronnI_Back.Models.DbModels.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("DronnI_Back.Models.DbModels.User", "Owner")
                         .WithMany("Drones")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Owner");
                 });

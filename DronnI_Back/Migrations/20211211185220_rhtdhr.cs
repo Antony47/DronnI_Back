@@ -2,7 +2,7 @@
 
 namespace DronnI_Back.Migrations
 {
-    public partial class arrd : Migration
+    public partial class rhtdhr : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -23,15 +23,16 @@ namespace DronnI_Back.Controllers
         public IActionResult AddDrone([FromBody] DroneModel droneModel)
         {
             User user = appCtx.Users.FirstOrDefault(u => u.Id == droneModel.OwnerId);
+            Category category = appCtx.Categories.FirstOrDefault(c => c.Id == droneModel.CategoryId);
             if (user != null)
             {
-                Drone drone = new Drone { OwnerId = droneModel.OwnerId, Owner = user , Status = "not available" };
+                Drone drone = new Drone { OwnerId = droneModel.OwnerId,
+                    Owner = user , CategoryId = droneModel.CategoryId, Category = category, Status = "not available" };
                 appCtx.Drones.Add(drone);
                 appCtx.Users.FirstOrDefault(u => u.Id == droneModel.OwnerId).Drones.Add(drone);
                 appCtx.SaveChanges();
                 return Ok();
             }
-
             return BadRequest(new { errorText = "Invalid OwnerId" });
         }
 
@@ -63,5 +64,19 @@ namespace DronnI_Back.Controllers
             return BadRequest(new { errorText = "Invalid DroneId" });
         }
 
+        [HttpPost("updateCategory")]
+        public IActionResult UpdateDroneCategory(int id, int idCategory)
+        {
+            Drone drone = appCtx.Drones.FirstOrDefault(d => d.Id == id);
+            Category category = appCtx.Categories.FirstOrDefault(c => c.Id == idCategory);
+            if (drone != null && category != null)
+            { 
+                appCtx.Drones.FirstOrDefault(d => d.Id == id).Category = category;
+                appCtx.SaveChanges();
+                return Ok();
+            }
+
+            return BadRequest(new { errorText = "Invalid DroneId or Category id" });
+        }
     }
 }

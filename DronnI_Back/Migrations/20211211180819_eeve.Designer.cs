@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DronnI_Back.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211205194515_Kerets")]
-    partial class Kerets
+    [Migration("20211211180819_eeve")]
+    partial class eeve
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,6 +21,45 @@ namespace DronnI_Back.Migrations
                 .HasAnnotation("ProductVersion", "5.0.12")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DronnI_Back.Models.DbModels.Backup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CreatingTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Backups");
+                });
+
+            modelBuilder.Entity("DronnI_Back.Models.DbModels.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Discription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("DronnI_Back.Models.DbModels.Drone", b =>
                 {
                     b.Property<int>("Id")
@@ -28,8 +67,14 @@ namespace DronnI_Back.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("X")
                         .HasColumnType("float");
@@ -38,6 +83,8 @@ namespace DronnI_Back.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OwnerId");
 
@@ -60,13 +107,14 @@ namespace DronnI_Back.Migrations
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OperatorId")
+                    b.Property<int?>("OperatorId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("StartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StatisticId")
+                    b.Property<int?>("StatisticId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -123,11 +171,17 @@ namespace DronnI_Back.Migrations
 
             modelBuilder.Entity("DronnI_Back.Models.DbModels.Drone", b =>
                 {
+                    b.HasOne("DronnI_Back.Models.DbModels.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("DronnI_Back.Models.DbModels.User", "Owner")
                         .WithMany("Drones")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Owner");
                 });
@@ -153,9 +207,7 @@ namespace DronnI_Back.Migrations
 
                     b.HasOne("DronnI_Back.Models.DbModels.Statistic", "Statistic")
                         .WithMany()
-                        .HasForeignKey("StatisticId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatisticId");
 
                     b.Navigation("Customer");
 

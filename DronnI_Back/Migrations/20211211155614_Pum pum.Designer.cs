@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DronnI_Back.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20211209113436_arrd")]
-    partial class arrd
+    [Migration("20211211155614_Pum pum")]
+    partial class Pumpum
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,29 @@ namespace DronnI_Back.Migrations
                     b.ToTable("Backups");
                 });
 
+            modelBuilder.Entity("DronnI_Back.Models.DbModels.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Discription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DroneId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DroneId");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("DronnI_Back.Models.DbModels.Drone", b =>
                 {
                     b.Property<int>("Id")
@@ -51,6 +74,9 @@ namespace DronnI_Back.Migrations
 
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("X")
                         .HasColumnType("float");
@@ -143,6 +169,13 @@ namespace DronnI_Back.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("DronnI_Back.Models.DbModels.Category", b =>
+                {
+                    b.HasOne("DronnI_Back.Models.DbModels.Drone", null)
+                        .WithMany("Drones")
+                        .HasForeignKey("DroneId");
+                });
+
             modelBuilder.Entity("DronnI_Back.Models.DbModels.Drone", b =>
                 {
                     b.HasOne("DronnI_Back.Models.DbModels.User", "Owner")
@@ -184,6 +217,11 @@ namespace DronnI_Back.Migrations
                     b.Navigation("Operator");
 
                     b.Navigation("Statistic");
+                });
+
+            modelBuilder.Entity("DronnI_Back.Models.DbModels.Drone", b =>
+                {
+                    b.Navigation("Drones");
                 });
 
             modelBuilder.Entity("DronnI_Back.Models.DbModels.User", b =>

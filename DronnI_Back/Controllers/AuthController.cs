@@ -1,10 +1,9 @@
 ﻿using DronnI_Back.Models;
 using DronnI_Back.Models.DbModels;
+using DronnI_Back.Helpers;
 using DronnI_Back.Models.RequestModels;
 using DronnI_Back.Models.ResponseModels;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -13,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 
 namespace DronnI_Back.Controllers
 {
@@ -41,9 +41,11 @@ namespace DronnI_Back.Controllers
         {
             if (appCtx.Users.FirstOrDefault(u => u.Email == email) == null)
             {
-                //Validation
-                User user = new User { Email = email, Password = password, Role = "user", Login = login};
-
+                User user = new User {
+                    Email = email,
+                    Password = Hasher.HashPassword(password),
+                    Role = "user",
+                    Login = login};
                 appCtx.Users.Add(user);
                 appCtx.SaveChanges();
                 var u = appCtx.Users.ToList().Last();
@@ -67,10 +69,11 @@ namespace DronnI_Back.Controllers
             }
             return BadRequest(new { errormesage = "This email is already used" });
         }
-
+        
         public AuthResponse Authenticate(UserModel userModel)
         {
-            User user = appCtx.Users.FirstOrDefault(x => x.Email == userModel.Email && x.Password == userModel.Password);
+            User user = appCtx.Users.ToList().FirstOrDefault(x => x.Email == userModel.Email
+            && Hasher.VerifyHashedPassword(x.Password, userModel.Password));
             var identity = GetIdentity(user);
             if (identity == null)
             {

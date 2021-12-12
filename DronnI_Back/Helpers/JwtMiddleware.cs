@@ -12,7 +12,7 @@ using DronnI_Back.Models;
 using DronnI_Back.Models.DbModels;
 using DronnI_Back;
 
-namespace TokyoBike.Helpers
+namespace DronnI_Back.Helpers
 {
     public class JwtMiddleware
     {

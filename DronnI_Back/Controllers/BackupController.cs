@@ -79,7 +79,7 @@ namespace DronnI_Back.Controllers
                     string alterFirst = $@"ALTER DATABASE {DbName} SET Single_User WITH Rollback Immediate";
                     SqlCommand alterfirstCommand = new SqlCommand(alterFirst, connection);
 
-                    string restore = string.Format("RESTORE DATABASE {0} FROM DISK = '{1}'", DbName, backup.Path);
+                    string restore = string.Format("RESTORE DATABASE {0} FROM DISK = '{1}' with replace", DbName, backup.Path);
                     SqlCommand restoreCommand = new SqlCommand(restore, connection);
 
                     string alterSecond = $@"ALTER DATABASE {DbName} SET Multi_User";

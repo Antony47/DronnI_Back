@@ -1,12 +1,12 @@
 ﻿using DronnI_Back.Models;
 using DronnI_Back.Models.DbModels;
 using DronnI_Back.Models.RequestModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DronnI_Back.Helpers;
 
 namespace DronnI_Back.Controllers
 {
@@ -28,11 +28,10 @@ namespace DronnI_Back.Controllers
             {
                 Drone drone = new Drone { OwnerId = droneModel.OwnerId, Owner = user };
                 appCtx.Drones.Add(drone);
-                appCtx.Users.FirstOrDefault(u => u.Id == droneModel.OwnerId).Drones.Add(drone);///???
+                appCtx.Users.FirstOrDefault(u => u.Id == droneModel.OwnerId).Drones.Add(drone);
                 appCtx.SaveChanges();
                 return Ok();
             }
-
             return BadRequest(new { errorText = "Invalid OwnerId" });
         }
 
@@ -48,10 +47,31 @@ namespace DronnI_Back.Controllers
             }
             return BadRequest(new { errorText = "Invalid DroneId" });
         }
-        [HttpGet]
-        public IActionResult GetMigration( int idMiration)
+        [HttpPost("addCategory")]
+        public IActionResult AddCategory([FromBody] CategoryModel categoryModel)
         {
-            return BadRequest(new { errorText = "Invalid Migration" });
+            Category category = new Category { Name = categoryModel.Name, Discription = categoryModel.Discription };
+            appCtx.Categories.Add(category);
+            appCtx.SaveChanges();
+            return Ok();
+        }
+        [HttpDelete("deleteCategory/{id}")]
+        public IActionResult DeleteCategory(int id)
+        {
+            Category category = appCtx.Categories.FirstOrDefault(d => d.Id == id);
+            if (category != null)
+            {
+                appCtx.Categories.Remove(category);
+                appCtx.SaveChanges();
+                return Ok();
+            }
+            return BadRequest(new { errorText = "Invalid Category id" });
+        }
+        [HttpGet("getAvailableDrone")]
+        public IActionResult GetAvailableDrone()
+        {
+            IEnumerable<Drone> result = appCtx.Drones.Where(d => d.Status.ToLower().Equals("available")).ToList();
+            return Json(result);
         }
     }
 }
