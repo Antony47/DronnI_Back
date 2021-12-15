@@ -20,12 +20,6 @@ namespace DronnI_Back.Controllers
         {
             appCtx = context;
         }
-        [HttpGet]
-        public IActionResult Get()
-        {
-            List<Rent> ss = appCtx.Rents.ToList();
-            return Json(ss);
-        }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
@@ -37,6 +31,29 @@ namespace DronnI_Back.Controllers
                 return Json(sightseen);
             }
             return BadRequest(new { errorText = "Invalid rentId" });
+        }
+
+        [HttpGet("getRents")]
+        public IActionResult GetRents()
+        {
+            List<Rent> result = appCtx.Rents.ToList();
+            List<Rent> fin = new List<Rent>();
+            for(int i = 0; i < result.Count; i++)
+            {
+                fin.Add(new Rent()
+                {
+                    Id = result[i].Id,
+                    CustomerId = result[i].CustomerId,
+                    OperatorId = result[i].OperatorId,
+                    Customer = result[i].Customer,
+                    DroneId = result[i].DroneId,
+                    StatisticId = result[i].StatisticId,
+                    Statistic = result[i].Statistic,
+                    StartTime = result[i].StartTime,
+                    EndTime = result[i].EndTime
+                }); 
+            }
+            return Json(fin);
         }
 
         [HttpPost("startRent")]
@@ -114,6 +131,19 @@ namespace DronnI_Back.Controllers
             return BadRequest(new { errorText = "Invalid OwnerId" });
         }
 
+        [HttpPost("closeOffer/{id}")]
+        public IActionResult closeOffer(int idRent)
+        {
+            Rent rent = appCtx.Rents.FirstOrDefault(r => r.Id == idRent);
+            if (rent != null)
+            {
+                appCtx.Rents.FirstOrDefault(r => r.Id == idRent).EndTime = DateTime.Now;
+                appCtx.SaveChanges();
+                return Ok();
+            }
+
+            return BadRequest(new { errorText = "Invalid OwnerId" });
+        }
     }
 }
 

@@ -73,5 +73,34 @@ namespace DronnI_Back.Controllers
             IEnumerable<Drone> result = appCtx.Drones.Where(d => d.Status.ToLower().Equals("available")).ToList();
             return Json(result);
         }
+
+        [HttpGet("getDrones")]
+        public IActionResult GetDrones()
+        {
+            List<Drone> result = appCtx.Drones.ToList();
+            List<Drone> fin = new List<Drone>();
+            for (int i = 0; i < result.Count; i++)
+            {
+                fin.Add(new Drone()
+                {
+                    Id = result[i].Id,
+                    Category = result[i].Category,
+                    OwnerId = result[i].OwnerId,
+                    Status = result[i].Status,
+                    X = result[i].X,
+                    Y = result[i].Y,
+                    CategoryId = result[i].CategoryId
+                });
+            }
+            return Json(fin);
+            
+        }
+
+        [HttpGet("getCategoryes")]
+        public IActionResult GetCategoryes()
+        {
+            IEnumerable<Category> result = appCtx.Categories.ToList();
+            return Json(result);
+        }
     }
 }

@@ -34,6 +34,13 @@ namespace DronnI_Back.Controllers
             appCtx = ctx;
         }
 
+        [HttpGet("getBackups")]
+        public IActionResult GetBackups()
+        {
+            IEnumerable<Backup> result = appCtx.Backups.ToList();
+            return Json(result);
+        }
+
         [HttpPost("addBackup")]
         public void BackUpDataBase()
         {
@@ -65,7 +72,7 @@ namespace DronnI_Back.Controllers
 
 
         }
-        [HttpPost("updateBackup")]
+        [HttpPost("updateBackup/{id}")]
         public void RestoreDataBase(int id)
         {
             Backup backup = appCtx.Backups.FirstOrDefault(d => d.Id == id);

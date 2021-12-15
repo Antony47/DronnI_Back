@@ -51,6 +51,7 @@ namespace DronnI_Back
                         ValidateIssuerSigningKey = true,
                     };
                 });
+            services.AddCors();
             services.AddControllersWithViews();
         }
        
@@ -67,6 +68,9 @@ namespace DronnI_Back
             app.UseRouting();
 
             app.UseMiddleware<JwtMiddleware>();
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseHttpsRedirection();
 
             app.UseEndpoints(endpoints =>
             {

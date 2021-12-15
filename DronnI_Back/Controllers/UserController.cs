@@ -78,5 +78,6 @@ namespace DronnI_Back.Controllers
 
             return BadRequest(new { errorText = "Invalid DroneId or Category id" });
         }
+
     }
 }
